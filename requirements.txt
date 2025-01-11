@@ -1,3 +1,4 @@
 ﻿flask==2.2.5
 yt-dlp
+pytubefix
 gunicorn
