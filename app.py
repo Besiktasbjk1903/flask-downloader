@@ -75,7 +75,6 @@ def home():
             video_data, filename = download_video_tiktok(url, format_choice)
 
         if video_data:
-            # Send the file to the browser (automatically downloads)
             return send_file(video_data,
                              as_attachment=True,
                              download_name=filename,
@@ -83,7 +82,6 @@ def home():
 
         return redirect(url_for('home'))
 
-    # Flask will automatically look in the 'templates' folder for the HTML file
     return render_template("index.html")
 
 if __name__ == "__main__":
