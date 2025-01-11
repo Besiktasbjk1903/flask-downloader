@@ -1,31 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
-import os
-from pytubefix import YouTube
 import yt_dlp as youtube_dl
 from io import BytesIO
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-
-# Function to download a YouTube video
-def download_video_youtube(url, format_choice):
-    try:
-        yt = YouTube(url)
-        if format_choice == "mp4":
-            stream = yt.streams.get_highest_resolution()
-            video_buffer = BytesIO()  # Create a memory buffer for the video
-            stream.stream_to_buffer(video_buffer)  # Stream the video into the buffer
-            video_buffer.seek(0)  # Reset the buffer position to the beginning
-            return video_buffer, yt.title + ".mp4"
-        elif format_choice == "mp3":
-            stream = yt.streams.filter(only_audio=True).first()
-            audio_buffer = BytesIO()  # Create a memory buffer for the audio
-            stream.stream_to_buffer(audio_buffer)  # Stream the audio into the buffer
-            audio_buffer.seek(0)  # Reset the buffer position to the beginning
-            return audio_buffer, yt.title + ".mp3"
-    except Exception as e:
-        flash(f"An error occurred: {e}", "error")
-        return None, None
 
 # Function to download a TikTok video using yt-dlp
 def download_video_tiktok(url, format_choice):
@@ -69,9 +47,7 @@ def home():
         video_data = None
         filename = None
 
-        if platform_choice == "YouTube":
-            video_data, filename = download_video_youtube(url, format_choice)
-        elif platform_choice == "TikTok":
+        if platform_choice == "TikTok":
             video_data, filename = download_video_tiktok(url, format_choice)
 
         if video_data:
